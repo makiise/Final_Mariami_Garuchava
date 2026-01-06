@@ -1,0 +1,13 @@
+venv/
+.env
+
+.idea/
+
+.ipynb_checkpoints/
+
+# don't upload raw data if it's huge
+# data/raw/*.csv
+
+
+__pycache__/
+*.py[cod]
