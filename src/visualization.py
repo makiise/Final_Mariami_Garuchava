@@ -49,6 +49,14 @@ def plot_outlier_analysis(df: pd.DataFrame, column: str):
     plt.xticks([0, 1], ['Survived', 'Dead'])
     plt.show()
 
+
+def plot_violin_sodium(df):
+    plt.figure(figsize=(10, 6))
+    sns.violinplot(data=df, x='DEATH_EVENT', y='serum_sodium', palette=SURVIVAL_PALETTE, hue='DEATH_EVENT')
+    plt.title('Sodium Concentration: Survival vs Death')
+    plt.xticks([0, 1], ['Survived', 'Dead'])
+    plt.show()
+
 def plot_correlation_heatmap(df: pd.DataFrame, corr_method):
     plt.figure(figsize=(12, 10))
     sns.heatmap(df.corr(method=corr_method), annot=True, cmap='bwr', fmt='.2f', center=0)
