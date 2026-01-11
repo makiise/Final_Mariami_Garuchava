@@ -1,6 +1,6 @@
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.metrics import classification_report, ConfusionMatrixDisplay
 from xgboost import XGBClassifier
 
 
@@ -23,7 +23,7 @@ def train_random_forest(X_train, y_train):
 # xgboost handles is mathematically optimized and handles clinical data imbalances 
 
 def train_xgboost(X_train, y_train):
-    model = XGBClassifier(n_estimators=100, learning_rate=0.1, max_depth=0.3, random_state=42)
+    model = XGBClassifier(n_estimators=100, learning_rate=0.1, max_depth=3, random_state=42)
     model.fit(X_train, y_train)
     return model
 
@@ -32,3 +32,10 @@ def train_xgboost(X_train, y_train):
 def evaluation_of_model(model, X_test, y_test):
     predictions = model.predict(X_test)
     return classification_report(y_test, predictions)
+
+# confusion matrix
+
+def confusion_matrix_display(model, X_test, y_test, ax, cmap, title):
+    display = ConfusionMatrixDisplay.from_estimator(model, X_test, y_test, ax=ax, cmap=cmap, colorbar=False)
+    ax.set_title(title, fontsize=12)
+    return display
