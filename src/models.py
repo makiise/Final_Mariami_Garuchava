@@ -1,31 +1,23 @@
-from sklearn.model_selection import train_test_split
-from src.data_processing.py import clean_process_data  
-import pandas as pd
-import sys
-import os
-from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import classification_report, ConfusionMatrixDisplay
-
-sys.path.append(os.path.abspath('..'))
-
-df = pd.read_csv('../data/raw/heart_failure_clinical_records_dataset.csv')
-df_processed = clean_process_data(df)
-
-# I will exclude death_event to prevent data leakage
-
-X = df_processed.drop('DEATH_EVENT', axis=1)
-y = df_processed['DEATH_EVENT']
-
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report, confusion_matrix
 
 
 # Model 1: Logistic regression. -> this is famous one for small medical data, I chose this linear classifier
 #  model because it calculates death_event as a linear combination of its features  
+def train_logistic_regression(X_train, y_train):
+    model = LogisticRegression(max_iter=1000)
+    model.fit(X_train, y_train)
+    return model
 
-model1 = LogisticRegression()
-model1.fit(X_train, y_train)
-y_pred_model1 = model1.predict(X_test)
+#random forest is the good choice when we need a strong accuracy and it is ideal for small medical data, like ours
 
-print(classification_report(y_test, y_pred_log))
+def train_random_forest(X_train, y_train):
+    model = RandomForestClassifier(n_estimators=100, random_state=42)
+    model.fit(X_train, y_train)
+    return model
+
+
+def evaluation_of_model(model, X_test, y_test):
+    predictions = model.predict(X_test)
+    return classification_report(y_test, predictions)
